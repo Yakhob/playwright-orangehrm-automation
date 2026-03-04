@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test'; // CRITICAL: Added this import
+\import { expect } from '@playwright/test';
 
 class PimPage {
     constructor(page) {
@@ -19,13 +19,12 @@ class PimPage {
         this.searchButton = page.getByRole('button', { name: 'Search' });
         this.confirmDeleteButton = page.getByRole('button', { name: 'Yes, Delete' });
 
-        // Search & Table
+        // Search & Table - ADDED employeeTable HERE
         this.employeeNameSearch = page.getByPlaceholder('Type for hints...').first();
-        this.employeeTable = page.locator('.oxd-table-body');
-        this.noRecordsMessage = page.locator('text=No Records Found');
+        this.employeeTable = page.locator('.oxd-table-body'); // This is what line 33 needs
         
         // Success Toast
-        this.successToast = page.locator('.oxd-toast-content-text');
+        this.successToast = page.locator('.oxd-toast-content-text').last();
     }
 
     async navigateToPIM() {
@@ -52,24 +51,22 @@ class PimPage {
         await this.employeeListMenu.click();
         await this.employeeNameSearch.fill(name);
         
-        // FIX: Corrected the autocomplete option selector
+        // Autocomplete selection
         const suggestion = this.page.locator('.oxd-autocomplete-dropdown .oxd-autocomplete-option');
         await suggestion.first().waitFor({ state: 'visible' });
         await suggestion.first().click();
 
         await this.searchButton.click();
-        // Wait for table to refresh (spinner gone)
         await this.page.locator('.oxd-loading-spinner').waitFor({ state: 'detached' });
     }
 
     async editEmployee(middleName) {
-        // FIX: More robust pencil icon locator
+        // Specific pencil icon locator
         await this.page.locator('.oxd-table-cell-actions .bi-pencil-fill').first().click();
         
         await this.page.getByRole('heading', { name: 'Personal Details' }).waitFor();
         await this.page.waitForLoadState('networkidle');
 
-        // Clear and fill middle name
         await this.middleNameInput.click({ clickCount: 3 });
         await this.page.keyboard.press('Backspace');
         await this.middleNameInput.fill(middleName);
@@ -79,7 +76,6 @@ class PimPage {
     }
 
     async deleteEmployee(lastName) {
-        // Find row by text and click trash icon
         const row = this.page.locator('.oxd-table-card', { hasText: lastName });
         await row.locator('.bi-trash').click();
         
