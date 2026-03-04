@@ -1,14 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-/**
- * Petstore API Automation - COMPLETE SUITE
- * Requirements: Pet (Add, Update, Find, Delete) & Store (Order, Find, Delete)
- */
+
 
 test.describe('Petstore API - Complete Functional Suite', () => {
     const baseUrl = 'https://petstore.swagger.io/v2';
     
-    // Test Data Management: Dynamic IDs to prevent environment conflicts
+ 
     const testPet = {
         id: Math.floor(Math.random() * 1000000), 
         name: 'Alpha-Test-Pet',
@@ -23,7 +20,6 @@ test.describe('Petstore API - Complete Functional Suite', () => {
         complete: true
     };
 
-    // --- PET ENDPOINTS ---
 
     test('1. Add a new pet to the store (POST)', async ({ request }) => {
         const response = await request.post(`${baseUrl}/pet`, {
@@ -51,7 +47,6 @@ test.describe('Petstore API - Complete Functional Suite', () => {
         expect(body.name).toBe('Alpha-Pet-Updated');
     });
 
-    // --- STORE ENDPOINTS ---
 
     test('4. Place an order for a pet (POST)', async ({ request }) => {
         const response = await request.post(`${baseUrl}/store/order`, {
@@ -74,7 +69,6 @@ test.describe('Petstore API - Complete Functional Suite', () => {
         expect(response.status()).toBe(200);
     });
 
-    // --- CLEANUP & NEGATIVE TESTING ---
 
     test('7. Delete the pet and verify removal (DELETE & GET)', async ({ request }) => {
         // Delete the pet
