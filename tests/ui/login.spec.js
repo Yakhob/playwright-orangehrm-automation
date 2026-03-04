@@ -14,10 +14,7 @@ test.describe('Login & Logout Tests', () => {
             loginData.validUser.password
         );
 
-        // Explicitly wait for the URL redirect to complete
         await expect(page).toHaveURL(/dashboard/, { timeout: 10000 });
-        
-        // Use the locator from the POM if available, or stay with this stable selector
         await expect(
             page.locator('.oxd-topbar-header-breadcrumb')
         ).toBeVisible();
@@ -32,7 +29,6 @@ test.describe('Login & Logout Tests', () => {
             loginData.invalidUser.password
         );
 
-        // Since login() doesn't wait for URL anymore, this alert check will be instant
         const alert = page.locator('.oxd-alert');
         await expect(alert).toBeVisible();
         await expect(alert).toContainText('Invalid credentials');
@@ -48,7 +44,6 @@ test.describe('Login & Logout Tests', () => {
             loginData.validUser.password
         );
 
-        // Ensure we are in before we try to get out
         await expect(page).toHaveURL(/dashboard/);
         
         await dashboardPage.logout();
